@@ -89,10 +89,10 @@ export default function DocentePage() {
 
   return (
     <div className="flex min-h-screen">
-      <div className="hidden md:flex md:flex-col md:fixed md:top-0 md:left-0 md:bottom-0 md:w-52">
+      <div className="hidden md:flex md:flex-col md:fixed md:top-0 md:left-0 md:bottom-0 md:w-52 md:z-30">
         <Sidebar role="docente" name="Prof. C. Ramírez" initials="CR" activePanel={panel} onNav={p => { setPanel(p); if (p !== 'resolver') setSelected(null) }} />
       </div>
-      <main className="flex-1 md:ml-52 flex flex-col">
+      <main className="flex-1 md:ml-52 flex flex-col relative z-0">
         <header className="bg-white border-b border-gray-100 px-5 h-12 flex items-center justify-between sticky top-0 z-10 shadow-sm">
   <button className="md:hidden mr-3" onClick={() => document.getElementById('mobile-sidebar')?.classList.toggle('hidden')}>☰</button>
           <div className="flex items-center gap-2 text-sm">
