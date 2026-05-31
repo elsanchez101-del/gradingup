@@ -111,9 +111,18 @@ export default function DocentePage() {
           {panel === 'reclamos' && (
             <div>
               <div className="mb-5 flex items-center justify-between flex-wrap gap-2">
-                <div><h1 className="text-xl font-bold">Reclamos por revisar</h1><p className="text-gray-500 text-sm mt-0.5">Prioridad IA · Tiempo real</p></div>
-                <button onClick={() => setPanel('scan')} className="md:hidden flex items-center gap-1 text-xs px-3 py-2 rounded-lg font-medium text-white" style={{background:'#002D62'}}>📷 Escanear examen</button>
+                <div className="mb-5 flex items-center justify-between">
+                  <div>
+                    <h1 className="text-xl font-bold">Reclamos por revisar</h1>
+                    <p className="text-gray-500 text-sm mt-0.5">Prioridad IA · Tiempo real</p>
+                  </div>
+                  <button onClick={() => setPanel('scan')}
+                    className="md:hidden text-xs px-4 py-2 rounded-lg font-semibold text-white flex items-center gap-1.5"
+                    style={{background:'#002D62'}}>
+                    📷 Escanear
+                  </button>
               </div>
+              </div>    
               <div className="grid grid-cols-3 gap-3 mb-5">
                 {[['Urgentes', pend.filter(r=>r.estado==='pendiente').length, '#EF4444'],['Pendientes', pend.length, '#3B82F6'],['Resueltos', res.length, '#10B981']].map(([l,n,c]) => (
                   <div key={String(l)} className="bg-white rounded-xl border border-gray-100 p-4 shadow-sm" style={{borderTop:`3px solid ${c}`}}>
