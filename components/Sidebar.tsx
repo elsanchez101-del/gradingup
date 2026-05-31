@@ -76,7 +76,7 @@ export default function Sidebar({ role, name, initials, activePanel, onNav }: Pr
       {/* Mobile hamburger button */}
       <button
         onClick={() => setOpen(!open)}
-        className="md:hidden fixed top-3 left-3 z-50 w-8 h-8 flex items-center justify-center rounded-lg text-white text-lg"
+        className="md:hidden fixed top-3 left-3 z-[100] w-8 h-8 flex items-center justify-center rounded-lg text-white text-lg"
         style={{background:'#002D62'}}>
         {open ? '✕' : '☰'}
       </button>
