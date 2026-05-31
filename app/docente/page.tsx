@@ -93,36 +93,40 @@ export default function DocentePage() {
         <Sidebar role="docente" name="Prof. C. Ramírez" initials="CR" activePanel={panel} onNav={p => { setPanel(p); if (p !== 'resolver') setSelected(null) }} />
       </div>
       <main className="flex-1 md:ml-52 flex flex-col">
-        <header className="bg-white border-b border-gray-100 px-5 h-12 flex items-center justify-between sticky top-0 z-[5] shadow-sm">
-        <div className="md:hidden flex gap-2 px-4 py-2 bg-white border-b border-gray-100">
-          <button onClick={() => setPanel('reclamos')} className={`flex-1 text-xs py-2 rounded-lg font-medium ${panel==='reclamos'?'bg-blue-600 text-white':'bg-gray-100 text-gray-600'}`}>📋 Reclamos</button>
-          <button onClick={() => setPanel('scan')} className={`flex-1 text-xs py-2 rounded-lg font-medium ${panel==='scan'?'bg-blue-600 text-white':'bg-gray-100 text-gray-600'}`}>📷 Escanear</button>
-        </div>
-  <button className="md:hidden mr-3" onClick={() => document.getElementById('mobile-sidebar')?.classList.toggle('hidden')}>☰</button>
+        <header className="bg-white border-b border-gray-100 px-5 h-12 flex items-center justify-between sticky top-0 z-10 shadow-sm">
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-gray-400">GradingUP</span><span className="text-gray-300">›</span>
-            <span className="font-medium">{panel === 'reclamos' ? 'Reclamos' : panel === 'scan' ? 'Escanear examen' : 'Resolver'}</span>
+            <span className="text-gray-400 hidden md:block">GradingUP</span>
+            <span className="text-gray-300 hidden md:block">›</span>
+            <span className="font-medium">{panel === 'reclamos' ? 'Reclamos' : panel === 'scan' ? 'Escanear' : 'Resolver'}</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs font-medium text-green-600">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />En vivo
           </div>
         </header>
+
         <div className="p-5 flex-1">
           {panel === 'reclamos' && (
             <div>
-              <div className="mb-5 flex items-center justify-between flex-wrap gap-2">
-                <div className="mb-5 flex items-center justify-between">
-                  <div>
-                    <h1 className="text-xl font-bold">Reclamos por revisar</h1>
-                    <p className="text-gray-500 text-sm mt-0.5">Prioridad IA · Tiempo real</p>
-                  </div>
-                  <button onClick={() => setPanel('scan')}
-                    className="md:hidden text-xs px-4 py-2 rounded-lg font-semibold text-white flex items-center gap-1.5"
+              <div className="mb-5 flex items-center justify-between">
+                <div>
+                  <h1 className="text-xl font-bold">Reclamos por revisar</h1>
+                  <p className="text-gray-500 text-sm mt-0.5">Prioridad IA · Tiempo real</p>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setPanel('reclamos')}
+                    className="text-xs px-3 py-2 rounded-lg font-semibold text-white"
                     style={{background:'#002D62'}}>
+                    📋 Reclamos
+                  </button>
+                  <button
+                    onClick={() => setPanel('scan')}
+                    className="text-xs px-3 py-2 rounded-lg font-semibold text-white"
+                    style={{background:'#C9A84C', color:'#001535'}}>
                     📷 Escanear
                   </button>
+                </div>
               </div>
-              </div>    
               <div className="grid grid-cols-3 gap-3 mb-5">
                 {[['Urgentes', pend.filter(r=>r.estado==='pendiente').length, '#EF4444'],['Pendientes', pend.length, '#3B82F6'],['Resueltos', res.length, '#10B981']].map(([l,n,c]) => (
                   <div key={String(l)} className="bg-white rounded-xl border border-gray-100 p-4 shadow-sm" style={{borderTop:`3px solid ${c}`}}>
@@ -166,6 +170,78 @@ export default function DocentePage() {
               })}
             </div>
           )}
+
+          {panel === 'scan' && (
+            <div className="max-w-xl">
+              <div className="mb-5 flex items-center justify-between">
+                <div>
+                  <h1 className="text-xl font-bold">Escanear examen</h1>
+                  <p className="text-gray-500 text-sm mt-0.5">30 segundos · OCR · Sube a Supabase</p>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setPanel('reclamos')}
+                    className="text-xs px-3 py-2 rounded-lg font-semibold text-white"
+                    style={{background:'#C9A84C', color:'#001535'}}>
+                    📋 Reclamos
+                  </button>
+                  <button
+                    onClick={() => setPanel('scan')}
+                    className="text-xs px-3 py-2 rounded-lg font-semibold text-white"
+                    style={{background:'#002D62'}}>
+                    📷 Escanear
+                  </button>
+                </div>
+              </div>
+              <div className="rounded-xl p-5 mb-4" style={{background:'#001535'}}>
+                <div className="border-2 border-dashed border-white/15 rounded-xl p-6 text-center cursor-pointer hover:border-yellow-400/50 transition-all" onClick={() => fileRef.current?.click()}>
+                  <input ref={fileRef} type="file" accept="image/*" multiple capture="environment" className="hidden" onChange={e => handleFotos(e.target.files)} />
+                  {fotos.length === 0 ? (
+                    <div>
+                      <p className="text-4xl mb-3">📷</p>
+                      <p className="text-white font-medium">Toca para escanear</p>
+                      <p className="text-white/40 text-xs mt-1">Múltiples fotos · Cámara o galería</p>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="grid grid-cols-3 gap-2 mb-2">
+                        {fotos.map((src, i) => <img key={i} src={src} className="w-full h-20 object-cover rounded-lg" alt="" />)}
+                      </div>
+                      <p className="text-white/50 text-xs">{fotos.length} foto{fotos.length>1?'s':''}</p>
+                    </div>
+                  )}
+                </div>
+                {ocrDone && (
+                  <div className="mt-3 rounded-lg p-3" style={{background:'rgba(255,255,255,0.05)'}}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                      <p className="text-xs font-bold text-green-400 uppercase tracking-wider">OCR · 94% confianza</p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[['Alumno','Fabrizio Morales'],['Código','20220847'],['Nota','11/20'],['Preguntas','5']].map(([l,v]) => (
+                        <div key={l} className="rounded p-2" style={{background:'rgba(255,255,255,0.05)'}}>
+                          <p className="text-[10px] text-white/40">{l}</p>
+                          <p className="text-sm font-medium" style={{color:l==='Nota'?'#C9A84C':'white'}}>{v}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              {uploading && (
+                <div className="mb-4">
+                  <p className="text-xs text-gray-500 mb-1">Subiendo...</p>
+                  <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div className="h-full bg-blue-500 rounded-full transition-all" style={{width:`${uploadPct}%`}} />
+                  </div>
+                </div>
+              )}
+              <button onClick={subir} disabled={uploading || fotos.length === 0} className="w-full py-3 rounded-xl font-bold text-sm disabled:opacity-50" style={{background:'#C9A84C',color:'#001535'}}>
+                {uploading ? 'Subiendo...' : '📤 Subir y publicar'}
+              </button>
+            </div>
+          )}
+
           {panel === 'resolver' && selected && (
             <div className="max-w-3xl">
               <button onClick={() => { setPanel('reclamos'); setSelected(null) }} className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800 mb-5">← Volver</button>
@@ -222,57 +298,6 @@ export default function DocentePage() {
                   </div>
                 </div>
               </div>
-            </div>
-          )}
-          {panel === 'scan' && (
-            <div className="max-w-xl">
-              <div className="mb-5"><h1 className="text-xl font-bold">Escanear examen</h1><p className="text-gray-500 text-sm mt-0.5">30 segundos · OCR · Sube a Supabase</p></div>
-              <div className="rounded-xl p-5 mb-4" style={{background:'#001535'}}>
-                <div className="border-2 border-dashed border-white/15 rounded-xl p-6 text-center cursor-pointer hover:border-yellow-400/50 transition-all" onClick={() => fileRef.current?.click()}>
-                  <input ref={fileRef} type="file" accept="image/*" multiple capture="environment" className="hidden" onChange={e => handleFotos(e.target.files)} />
-                  {fotos.length === 0 ? (
-                    <div>
-                      <p className="text-4xl mb-3">📷</p>
-                      <p className="text-white font-medium">Toca para escanear</p>
-                      <p className="text-white/40 text-xs mt-1">Múltiples fotos · Cámara o galería</p>
-                    </div>
-                  ) : (
-                    <div>
-                      <div className="grid grid-cols-3 gap-2 mb-2">
-                        {fotos.map((src, i) => <img key={i} src={src} className="w-full h-20 object-cover rounded-lg" alt="" />)}
-                      </div>
-                      <p className="text-white/50 text-xs">{fotos.length} foto{fotos.length>1?'s':''}</p>
-                    </div>
-                  )}
-                </div>
-                {ocrDone && (
-                  <div className="mt-3 rounded-lg p-3" style={{background:'rgba(255,255,255,0.05)'}}>
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                      <p className="text-xs font-bold text-green-400 uppercase tracking-wider">OCR · 94% confianza</p>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      {[['Alumno','Fabrizio Morales'],['Código','20220847'],['Nota','11/20'],['Preguntas','5']].map(([l,v]) => (
-                        <div key={l} className="rounded p-2" style={{background:'rgba(255,255,255,0.05)'}}>
-                          <p className="text-[10px] text-white/40">{l}</p>
-                          <p className="text-sm font-medium" style={{color:l==='Nota'?'#C9A84C':'white'}}>{v}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-              {uploading && (
-                <div className="mb-4">
-                  <p className="text-xs text-gray-500 mb-1">Subiendo...</p>
-                  <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <div className="h-full bg-blue-500 rounded-full transition-all" style={{width:`${uploadPct}%`}} />
-                  </div>
-                </div>
-              )}
-              <button onClick={subir} disabled={uploading || fotos.length === 0} className="w-full py-3 rounded-xl font-bold text-sm disabled:opacity-50" style={{background:'#C9A84C',color:'#001535'}}>
-                {uploading ? 'Subiendo...' : '📤 Subir y publicar'}
-              </button>
             </div>
           )}
         </div>
