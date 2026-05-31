@@ -89,10 +89,27 @@ export default function DocentePage() {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar role="docente" name="Prof. C. Ramírez" initials="CR" activePanel={panel} onNav={p => { setPanel(p); if (p !== 'resolver') setSelected(null) }} />
+      <div className="hidden md:flex md:flex-col md:fixed md:top-0 md:left-0 md:bottom-0 md:w-52 md:z-30">
+        <Sidebar role="docente" name="Prof. C. Ramírez" initials="CR" activePanel={panel} onNav={p => { setPanel(p); if (p !== 'resolver') setSelected(null) }} />
       </div>
-      <main className="flex-1 md:ml-52 flex flex-col relative z-0">
+      <main className="flex-1 md:ml-52 flex flex-col ">
         <header className="bg-white border-b border-gray-100 px-5 h-12 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+  <div className="flex items-center gap-3">
+    <div className="flex md:hidden gap-2">
+      <button onClick={() => setPanel('reclamos')} className={`text-xs px-3 py-1 rounded-full font-medium ${panel==='reclamos'?'bg-blue-100 text-blue-700':'text-gray-500'}`}>📋</button>
+      <button onClick={() => setPanel('scan')} className={`text-xs px-3 py-1 rounded-full font-medium ${panel==='scan'?'bg-blue-100 text-blue-700':'text-gray-500'}`}>📷</button>
+      <button onClick={() => setPanel('resolver')} className={`text-xs px-3 py-1 rounded-full font-medium ${panel==='resolver'?'bg-blue-100 text-blue-700':'text-gray-500'}`}>⚖️</button>
+    </div>
+    <div className="flex items-center gap-2 text-sm">
+      <span className="text-gray-400 hidden md:block">GradingUP</span>
+      <span className="text-gray-300 hidden md:block">›</span>
+      <span className="font-medium">{panel === 'reclamos' ? 'Reclamos' : panel === 'scan' ? 'Escanear' : 'Resolver'}</span>
+    </div>
+  </div>
+  <div className="flex items-center gap-1.5 text-xs font-medium text-green-600">
+    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />En vivo
+  </div>
+</header>
   <button className="md:hidden mr-3" onClick={() => document.getElementById('mobile-sidebar')?.classList.toggle('hidden')}>☰</button>
           <div className="flex items-center gap-2 text-sm">
             <span className="text-gray-400">GradingUP</span><span className="text-gray-300">›</span>
