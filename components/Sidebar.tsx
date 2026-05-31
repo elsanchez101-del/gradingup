@@ -1,4 +1,5 @@
 'use client'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
 
 export default function Sidebar({ role, name, initials, activePanel, onNav }: Props) {
   const router = useRouter()
+  const [open, setOpen] = useState(false)
   const roleColor = role === 'alumno' ? '#C9A84C' : role === 'docente' ? '#7FB3FF' : '#5DD4A0'
   const roleBg = role === 'alumno' ? 'rgba(201,168,76,0.2)' : role === 'docente' ? 'rgba(26,86,160,0.3)' : 'rgba(13,122,69,0.3)'
   const roleLabel = role === 'alumno' ? 'Alumno' : role === 'docente' ? 'Docente' : 'Admin'
@@ -30,7 +32,7 @@ export default function Sidebar({ role, name, initials, activePanel, onNav }: Pr
     ],
   }
 
-  return (
+  const SidebarContent = () => (
     <aside className="w-52 flex flex-col h-full" style={{background:'#002D62'}}>
       <div className="p-4 flex items-center gap-2" style={{borderBottom:'1px solid rgba(255,255,255,0.07)'}}>
         <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black flex-shrink-0" style={{background:'#C9A84C',color:'#001535'}}>UP</div>
@@ -44,7 +46,7 @@ export default function Sidebar({ role, name, initials, activePanel, onNav }: Pr
       <nav className="p-2 flex-1">
         <p className="text-white/20 text-[9px] uppercase tracking-widest px-2 py-2">Principal</p>
         {(navItems[role as keyof typeof navItems] || []).map(item => (
-          <button key={item.id} onClick={() => onNav(item.id)}
+          <button key={item.id} onClick={() => { onNav(item.id); setOpen(false) }}
             className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs transition-all text-left"
             style={{
               background: activePanel === item.id ? 'rgba(255,255,255,0.08)' : 'transparent',
@@ -62,5 +64,32 @@ export default function Sidebar({ role, name, initials, activePanel, onNav }: Pr
         </button>
       </div>
     </aside>
+  )
+
+  return (
+    <>
+      {/* Desktop */}
+      <div className="hidden md:flex md:flex-col h-full">
+        <SidebarContent />
+      </div>
+
+      {/* Mobile hamburger button */}
+      <button
+        onClick={() => setOpen(!open)}
+        className="md:hidden fixed top-3 left-3 z-50 w-8 h-8 flex items-center justify-center rounded-lg text-white text-lg"
+        style={{background:'#002D62'}}>
+        {open ? '✕' : '☰'}
+      </button>
+
+      {/* Mobile overlay */}
+      {open && (
+        <div className="md:hidden fixed inset-0 z-40" onClick={() => setOpen(false)}
+          style={{background:'rgba(0,0,0,0.5)'}}>
+          <div className="h-full w-52" onClick={e => e.stopPropagation()}>
+            <SidebarContent />
+          </div>
+        </div>
+      )}
+    </>
   )
 }

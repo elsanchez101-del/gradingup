@@ -94,6 +94,7 @@ export default function DocentePage() {
       </div>
       <main className="flex-1 md:ml-52 flex flex-col">
         <header className="bg-white border-b border-gray-100 px-5 h-12 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+  <button className="md:hidden mr-3" onClick={() => document.getElementById('mobile-sidebar')?.classList.toggle('hidden')}>☰</button>
           <div className="flex items-center gap-2 text-sm">
             <span className="text-gray-400">GradingUP</span><span className="text-gray-300">›</span>
             <span className="font-medium">{panel === 'reclamos' ? 'Reclamos' : panel === 'scan' ? 'Escanear examen' : 'Resolver'}</span>
